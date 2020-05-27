@@ -13,16 +13,22 @@ counter = -1
 @app.route('/', methods=['POST'])
 def default():
     global dls
-    if request.method == 'POST':
-        inp = request.get_json()
-        dls[inp['id']] = inp['all_downloads']
-        return {'message': 'success'}
+    inp = request.get_json()
+    dls[inp['id']] = inp['all_downloads']
+    return {'message': 'success'}
 
 @app.route('/<idx>')
 def my_view_func(idx):
     global dls
-    return {'dlstatus': dls[int(idx)]}
-
+    if (int(idx) not in dls):
+        return '<h1>NOT A VALID ID!</h1>'
+    data = dls[int(idx)]
+    ret = ''
+    for x in data:
+        filename = x['filename'].split('/')[-1]
+        ret += '<h2>' + filename + ': ' + str(round(x['bytesReceived'] * 100 / x['totalBytes'], 2)) + '%</h2>'
+    print(ret)
+    return ret
 
 @app.route('/getID', methods=['GET'])
 def getID():

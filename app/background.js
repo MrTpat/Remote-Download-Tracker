@@ -6,7 +6,6 @@ const sendUpdate = (items) => {
         request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
         reqbody = { all_downloads: items, id: ID }
         request.onload = () => {
-            console.log(request)
             if (request.status >= 200 && request.status < 300) {
                 resolve(JSON.parse(request.responseText));
             } else {
@@ -14,7 +13,6 @@ const sendUpdate = (items) => {
             }
         };
         request.onerror = () => {
-            console.log(request)
             reject(request.statusText)
         };
         request.send(JSON.stringify(reqbody));
@@ -29,7 +27,6 @@ const isChanged = (new_obj) => {
         return false;
     } else {
         isChanged.last = new_obj;
-        console.log("UPDATED!")
         return true;
     }
 }
@@ -61,7 +58,8 @@ const SERVER_URL = "http://127.0.0.1:5000/";
 var ID = -1;
 getNewID().then((res) => {
     ID = res.id;
-    console.log('Starting with ID ' + ID)
+    localStorage.setItem('id', ID);
+    console.log('ID: ' + ID)
     setInterval(updateActiveDownloads, 5000);
 }).catch((err) => {
     console.error('Could not obtain the ID!')
