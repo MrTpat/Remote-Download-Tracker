@@ -1,10 +1,7 @@
 {"extName": {
-    "message": "Download and Open Button",
-    "description": "Extension name"},
+    "message": "Remote Download Tracker",
+    "description": "Track your chrome downloads from another device. No account or app required!"},
   "extDesc": {
-    "message": "Download and Open Context Menu Button",
-    "description": "Extension description"},
-  "openContextMenuTitle": {
-    "message": "Download and Open",
-    "description": "context menu button text"}}
+    "message": "Remote Download Tracker",
+    "description": "Track your chrome downloads from another device. No account or app required!"}}
  

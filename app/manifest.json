@@ -1,17 +1,13 @@
 {
-    "name": "__MSG_extName__",
+    "name": "Remote Download Tracker",
     "version": "0.1",
     "manifest_version": 2,
-    "description": "__MSG_extDesc__",
+    "description": "Track your chrome downloads from another device. No account or app required!",
     "web_accessible_resources": [
         "lib/lru.js"
     ],
-    "icons": {
-        "16": "icon16.png",
-        "128": "icon128.png"
-    },
     "browser_action": {
-        "default_title": "__MSG_extName__",
+        "default_title": "Remote Download Tracker",
         "default_popup": "popup.html"
     },
     "background": {

@@ -19,7 +19,7 @@ def default():
 def my_view_func(idx):
     global dls
     if (int(idx) not in dls):
-        return '<h1>NOT A VALID ID! Or you have no downloads going.</h1>'
+        return '<h1>NOT A VALID ID!</h1>'
     data = dls[int(idx)]
     if len(data) == 0:
         return '<h1>NO ACTIVE DOWNLOADS!</h1>'
@@ -34,5 +34,6 @@ def my_view_func(idx):
 def getID():
     global counter
     counter += 1
+    dls[counter] = []
     return {'id': counter}
     
