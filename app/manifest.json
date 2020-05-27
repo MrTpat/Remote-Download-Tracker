@@ -18,7 +18,6 @@
     },
     "default_locale": "en",
     "permissions": [
-        "contextMenus",
         "downloads",
         "downloads.open"
     ]
