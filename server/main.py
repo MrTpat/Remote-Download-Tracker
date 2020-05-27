@@ -10,15 +10,18 @@ CORS(app)
 
 dls = {}
 counter = -1
-@app.route('/', methods=['POST', 'GET'])
+@app.route('/', methods=['POST'])
 def default():
     global dls
     if request.method == 'POST':
         inp = request.get_json()
         dls[inp['id']] = inp['all_downloads']
         return {'message': 'success'}
-    elif request.method == 'GET':
-        return {'data': dls[inp['id']]}
+
+@app.route('/<idx>')
+def my_view_func(idx):
+    global dls
+    return {'dlstatus': dls[int(idx)]}
 
 
 @app.route('/getID', methods=['GET'])

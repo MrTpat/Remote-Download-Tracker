@@ -1,10 +1,24 @@
 
 const sendUpdate = (items) => {
-    const request = new XMLHttpRequest();
-    request.open("POST", SERVER_URL, true);
-    request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-    reqbody = { all_downloads: items }
-    request.send(JSON.stringify(reqbody));
+    return new Promise((resolve, reject) => {
+        const request = new XMLHttpRequest();
+        request.open("POST", SERVER_URL, true);
+        request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        reqbody = { all_downloads: items, id: ID }
+        request.onload = () => {
+            console.log(request)
+            if (request.status >= 200 && request.status < 300) {
+                resolve(JSON.parse(request.responseText));
+            } else {
+                reject(request.statusText);
+            }
+        };
+        request.onerror = () => {
+            console.log(request)
+            reject(request.statusText)
+        };
+        request.send(JSON.stringify(reqbody));
+    });
 }
 
 const isChanged = (new_obj) => {
@@ -20,27 +34,40 @@ const isChanged = (new_obj) => {
     }
 }
 const updateActiveDownloads = () => {
-    chrome.downloads.search({state: 'in_progress'}, function (items) {
+    chrome.downloads.search({ state: 'in_progress' }, function (items) {
         if (isChanged(items)) {
-            sendUpdate(items);
+            sendUpdate(items).then((success) => { }).catch((err) => { console.log(err) })
         }
     });
-    
+
 }
-const getNewID = new Promise((resolve, reject) => {
-    //make request
-    const request = new XMLHttpRequest();
-    request.onreadystatechange = () => {
-        if (request.readyState == 4) {
-            console.log(request.response)
-        }
-    }
-    request.open("GET", SERVER_URL + '/getID', true);
-    request.send();
-})
-const ID = getNewID();
-const SERVER_URL = "http://127.0.0.1:5000/"
-setInterval(updateActiveDownloads, 5000);
+const getNewID = () => {
+    return new Promise((resolve, reject) => {
+        let xhr = new XMLHttpRequest();
+        xhr.open("GET", SERVER_URL + 'getID', true);
+        xhr.onload = () => {
+            if (xhr.status >= 200 && xhr.status < 300) {
+                resolve(JSON.parse(xhr.responseText));
+            } else {
+                reject(xhr.statusText);
+            }
+        };
+        xhr.onerror = () => reject(xhr.statusText);
+        xhr.send();
+    });
+}
+
+const SERVER_URL = "http://127.0.0.1:5000/";
+var ID = -1;
+getNewID().then((res) => {
+    ID = res.id;
+    console.log('Starting with ID ' + ID)
+    setInterval(updateActiveDownloads, 5000);
+}).catch((err) => {
+    console.error('Could not obtain the ID!')
+});
+
+
 // function getOpeningIds() {
 //     var ids = [];
 //     try {
